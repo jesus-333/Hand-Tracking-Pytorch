@@ -44,5 +44,6 @@ The *hand_detector_V2.py* contain the script that track the hand(s). It use Open
 
 ## Contacs 
 If you ever use this code please cite me  :pray:  :heart:
+
 If you need to contact my you could write me at *alberto.zancanaro.1@gmail.com* or *alberto.zancanaro.1@studenti.unipd.it* .
 
