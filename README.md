@@ -37,8 +37,12 @@ I use 140 x 140 square as size of the image but you could choose the size that y
 The trained network provided with the code doesn't work very well since I train its on 200 example. Also I suggest you to use always the same hand to improve the accurancy. A trick later used in the the final script is to mirror one of the two hand find by RCNN so the classifier will only receive *one type* of hand and give similar results for both hand.
 
 
-### Hand tracking script
+## Hand tracking script
 The *hand_detector_V2.py* contain the script that track the hand(s). It use OpenCV to capture the camera image and feed that image to the RCNN. With the RCNN I find the hand, take only that portion of the image, reshape in a 140 x 140 square and feed them into the fingers counter.
 
 **NB:** You need a GPU with CUDA to obtain a (more or less) smoot frame rate. I use a GTX 2070 but probably even less powerfull GPU work. To improve the FPS I use a little trick: instead of feed every frame into the RCNN I do it every 3 frame. In this way the code works smoothly granted that you had a GPU capable of executing the code require by the RCNN in relative small time.
+
+## Contacs 
+If you ever use this code please cite me  :pray:  :heart:
+If you need to contact my you could write me at *alberto.zancanaro.1@gmail.com* or *alberto.zancanaro.1@studenti.unipd.it* .
 
