@@ -12,4 +12,17 @@ To test the track in real time you also need [OpenCV](https://opencv.org/).
 ## RCNN Training
 I try two different dataset to train the network. The firs is the pretty famous [EgoHands Dataset](http://vision.soic.indiana.edu/projects/egohands/) (The 1.3 Gb version) and the other is a my personal (costum) dataset that I create. The results are similar and you could choose which one to use. The trained model provided in the link is trained on my personal dataset. 
 
-### Costum dataset creation
+### Costum dataset use and creation
+To create your own dataset used the file inside the *RCNN (my dataset)* folder. The files are well commented but basically you need to:
+1. Execute the *dataset_creator.py* (you need OpenCV for this). This script create a windows with the image capture by your camera and n boxes (n set by you). You position the hand inside the boxes and after x seconds (x decide by you) the image and the boxes position are saved.
+2. Check the dataset with *dataset_check.py* (OPTIONAL).
+3. Train the network with *train_RCNN.py* .
+
+The *MyDataset.py* file contain the Dataset class used during training. This class is an extension of the Pytorch Dataset class and it will used in combination with the Dataloader (more info and example [here](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html), [here](https://pytorch.org/docs/stable/data.html), [here](https://pytorch.org/docs/stable/torchvision/datasets.html) and [here](https://stanford.edu/~shervine/blog/pytorch-how-to-generate-data-parallel)).
+
+The *support_function.py* contain function used during the dataset creation and the dataset loading.
+
+**NB:** The train need torchvision. All the file are inside the *vision* folder and that folder must be in the same folder of *train_RCNN.py*.
+
+### EgoHands dataset use
+To train the model with the EgoHands dataset download the dataset from the [link](http://vision.soic.indiana.edu/projects/egohands/) (The 1.3 Gb version). Extract it and put the folders inside the *_LABELLED_SAMPLES* in tha path that you will use to contain the file for the training. After that execute the file *train_RCNN.py* .
