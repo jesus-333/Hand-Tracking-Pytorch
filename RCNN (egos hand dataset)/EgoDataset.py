@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 File containing the dataset class used in the train of the RCNN. 
-This dataset is created thorough the script dataset_creator.py 
+This dataset is the EgoHands dataset.
 The class is an extension of the Dataset class provided by Pytorch.
 To optimize memory consumption the dataset doesn't store the images but only the path to them. Images are read on fly when you access to an element of the dataset
 
 Based on the script and tutorial on the Pytorch website (https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html)
 
-N.B. Inside path you must have 2 folder: Boxes and Image
+N.B. Inside path you must have the folders that you find inside _LABELLED_SAMPLES.
 
 @author: Alberto Zancanaro (Jesus)
 """
@@ -28,40 +28,37 @@ from support_function import *
 
 #%%
 
-class MyDataset(torch.utils.data.Dataset):
+class EgoDataset(torch.utils.data.Dataset):
     
-    # Inizialization method
-    def __init__(self, path, n_elements = -1, shuffle = True, transforms = None):
-        # Check if the number of elements is ok. In my case I had taken 422 so the max number of element is 422
-        if(n_elements > 422 or n_elemets < 0): n_elements = 420
+    def __init__(self, path, n_elements = -1, transforms = None):
+        if(n_elements > 2400): n_elements = 450
+        entire_folder = int(n_elements / 100) # n_elements will become the nearest lower multiple of 100
+        sample_last_Folder = n_elements % 100 # Not used
         
-        image_list = []
-        tmp_boxes_list = []
+        # Work similar to MyDataset
+        folder_list = []
+        for element in os.walk(path): folder_list.append(element)
+        del folder_list[0]
         
-        # Read all the file in the folder and return them as list of string
-        for element in os.walk(path + "/Image"): image_list.append(element)
-        for element in os.walk(path + "/Boxes"): tmp_boxes_list.append(element)
+        folder_list = random.sample(folder_list, entire_folder + 1)
         
-        image_list = image_list[0][2]
-        tmp_boxes_list = tmp_boxes_list[0][2]
-        
-        # Add the path to the file name
         elements_list = []
         boxes_list = []
-        for boxes_name, image_name, i in zip(tmp_boxes_list, image_list, range(n_elements)):
-            elements_list.append(path + "/Image/" + image_name)
-            # boxes_list.append(np.load(path + "/Boxes/" + boxes_name).T)
-            boxes_list.append(convertBoxes(path + "/Boxes/" + boxes_name))
-            
+        for folder in folder_list:
+            boxes = np.squeeze(scipy.io.loadmat(folder[0] + "/" + folder[2][100])['polygons'])
+            boxes = getListBoxes(boxes)
+            folder[2].sort()
+            for i, photo_name in zip(range(100), folder[2]):
+                elements_list.append(folder[0] + "/" + photo_name)
+                boxes_list.append(getBoxes(i, boxes))
         
-        # Shuffle dataset (OPTIONAL)
-        if(shuffle):
-            tmp_index_list = np.linspace(0,len(boxes_list) - 1, len(boxes_list)).astype(int)
-            np.random.shuffle(tmp_index_list)
-            elements_list = [elements_list[i] for i in tmp_index_list]
-            boxes_list = [boxes_list[j] for j in tmp_index_list]
-
-            
+        # Shuffle elements
+        tmp_index_list = np.linspace(0,len(elements_list) - 1, len(elements_list)).astype(int)
+        np.random.shuffle(tmp_index_list)
+        elements_list = [elements_list[i] for i in tmp_index_list]
+        boxes_list = [boxes_list[j] for j in tmp_index_list]
+                            
+                
         self.transforms = transforms
         self.boxes_list = boxes_list
         self.elements = elements_list
@@ -74,8 +71,8 @@ class MyDataset(torch.utils.data.Dataset):
         
         # Retrieve boxes and convert into tensor
         boxes = self.boxes_list[idx]
+        boxes = convertBoxes(boxes)
         self.last_boxes = boxes
-        # boxes = convertBoxes(boxes)
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
         
         # there is only one class
@@ -116,7 +113,6 @@ class MyDataset(torch.utils.data.Dataset):
         img_opencv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         boxes = target['boxes'].numpy()
         
-        print(boxes)
         for box in boxes:
             cv2.rectangle(img_opencv, (box[0], box[1]), (box[2], box[3]), color = color, thickness = thickness)
             
@@ -148,14 +144,19 @@ def get_transform(train):
         transforms.append(T.RandomHorizontalFlip(0.5))
     return T.Compose(transforms)
 
-# Not used (implemented only for test)
-def get_transform_2():        
+def get_transform_2():
+    # Kernel for morphological transformation    
+   
+        
     transforms = []
     
     transforms.append(TransformOpenCV())
     transforms.append(T.ToTensor())
 
     return T.Compose(transforms)
+
+
+#%%
     
 class TransformOpenCV(object):
 
