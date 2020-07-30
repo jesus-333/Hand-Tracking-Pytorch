@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 import math
-import socket
 import time
 
 from hand_detector_utils import *
@@ -22,12 +21,6 @@ flip_frame = True
 
 #%% Other variables (don't modify)
 
-# Variables for UPD use
-UDP_IP = "127.0.0.1"
-UDP_PORT = 5065
-
-# Socket object
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # Counter use to FPS improvement
 counter = 0
@@ -162,72 +155,8 @@ while capture.isOpened():
     # Show the frame (and optionally the hand image)
     cv2.imshow("Full Frame", frame)
     # cv2.imshow("Frame copy", frame_copy)
-    cv2.imshow("Hand 1 (SX)", cv2.resize(hand1, (140, 140)))
+    # cv2.imshow("Hand 1 (SX)", cv2.resize(hand1, (140, 140)))
     # cv2.imshow("Hand 2 (DX)", hand2)
-    
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    # Create and send command
-    
-    if(len(boxes_predict) > 0):
-        if(-1 not in finger_list_2):  # If both hands are on the screen
-            # Evaluate central points for both hand
-            central_point_1 = centralPointInBox(boxes_predict[0])
-            central_point_2 = centralPointInBox(boxes_predict[1])
-            
-            # Create the command with the position of the central point
-            command_hand_position_1 = "h 1 " +  str(central_point_1[0]) + " " + str(central_point_1[1])
-            command_hand_position_2 = "h 2 " +  str(central_point_2[0]) + " " + str(central_point_2[1])
-            
-            # Ration of finger counter necessary to obtain hand close or open
-            ratio = 3/5
-            
-            # Creation finger command for hand 1
-            if(finger_list_1.count(5)/5 >= ratio or finger_list_1.count(4)/5 >= ratio or (finger_list_1.count(4) + finger_list_1.count(5))/5):
-                command_finger_1 = "f 1 OPEN"
-            elif(finger_list_1.count(0)/5 >= ratio or finger_list_1.count(1)/5 >= ratio or (finger_list_1.count(0) + finger_list_1.count(1))/5):
-                command_finger_1 = "f 1 CLOSE"
-            else: command_finger_1 = "f 1 IDDLE"
-            
-            # Creation finger command for hand 2
-            if(finger_list_2.count(5)/5 >= ratio or finger_list_2.count(4)/5 >= ratio or (finger_list_2.count(4) + finger_list_2.count(5))/5):
-                command_finger_2 = "f 2 OPEN"
-            elif(finger_list_2.count(0)/5 >= ratio or finger_list_2.count(1)/5 >= ratio or (finger_list_2.count(0) + finger_list_2.count(1))/5):
-                command_finger_2 = "f 2 CLOSE"
-            else: command_finger_2 = "f 2 IDDLE"
-                    
-        else:  # If only one hand is on the screen (i.e. at least 1 element in finger_list_2 is -1)
-            # Evaluate central points for both hand
-            central_point_1 = centralPointInBox(boxes_predict[0])
-            
-            # Create the command with the position of the central point
-            command_hand_position_1 = "h 1 " +  str(central_point_1[0]) + " " + str(central_point_1[1])
-            command_hand_position_2 = "h 2 " +  str(-1) + " " + str(-1)
-            
-            # Ration of finger counter necessary to obtain hand close or open
-            ratio = 3/5
-            
-            # Creation finger command for hand 1
-            if(finger_list_1.count(5)/5 >= ratio or finger_list_1.count(4)/5 >= ratio or (finger_list_1.count(4) + finger_list_1.count(5))/5):
-                command_finger_1 = "f 1 OPEN"
-            elif(finger_list_1.count(0)/5 >= ratio or finger_list_1.count(1)/5 >= ratio or (finger_list_1.count(0) + finger_list_1.count(1))/5):
-                command_finger_1 = "f 1 CLOSE"
-            else: command_finger_1 = "f 1 IDDLE"
-            
-            # Creation finger command for hand 2
-            command_finger_2 = "f 2 IDDLE"
-            
-    else:
-         # Create the command with the position of the central point
-         command_hand_position_1 = "h 1 "  +  str(-1) + " " + str(-1)
-         command_hand_position_2 = "h 2 "  +  str(-1) + " " + str(-1)
-         command_finger_1 = "f 1 IDDLE"
-         command_finger_2 = "f 2 IDDLE"
-        
-    # Send command
-    sendCommand(sock, UDP_IP, UDP_PORT, command_hand_position_1, debug_var = False)
-    sendCommand(sock, UDP_IP, UDP_PORT, command_hand_position_2, debug_var = False)
-    sendCommand(sock, UDP_IP, UDP_PORT, command_finger_1, debug_var = False)
-    sendCommand(sock, UDP_IP, UDP_PORT, command_finger_2, debug_var = False)
     
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Close the camera if 'q' is pressed
