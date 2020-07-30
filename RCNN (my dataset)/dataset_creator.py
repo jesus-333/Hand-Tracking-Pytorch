@@ -21,8 +21,6 @@ import os
 
 from support_function import *
 
-import torch
-
 #%% Variables
 
 # Max and min dimension of boxes

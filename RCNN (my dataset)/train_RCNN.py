@@ -124,11 +124,11 @@ for epoch in range(num_epochs):
     # update the learning rate
     lr_scheduler.step()
 
-    if(epoch % 10 == 0): torch.save(model, "model_all_" + str(epoch) +".pth")
+    # Uncomment if you want to save your model every 10 epocj
+    # if(epoch % 10 == 0): torch.save(model, "model_all_" + str(epoch) +".pth")
 
 print("That's it!")
 torch.save(model, "model_all_" + str(num_epochs) +".pth")
-
 
 #%% Test on the dataset
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')

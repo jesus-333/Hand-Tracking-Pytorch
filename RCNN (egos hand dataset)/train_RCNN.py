@@ -106,7 +106,7 @@ for epoch in range(num_epochs):
     # evaluate on the test dataset
 
 print("That's it!")
-
+torch.save(model, "model_all_" + str(num_epochs) +".pth")
 
 #%% Test the model
 
