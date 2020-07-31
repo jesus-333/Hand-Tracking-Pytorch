@@ -42,6 +42,11 @@ The *hand_detector_V2.py* contain the script that track the hand(s). It use Open
 
 **NB:** You need a GPU with CUDA to obtain a (more or less) smoot frame rate. I use a GTX 2070 but probably even less powerfull GPU work. To improve the FPS I use a little trick: instead of feed every frame into the RCNN I do it every 3 frame. In this way the code works smoothly granted that you had a GPU capable of executing the code require by the RCNN in relative small time.
 
+## TODO List
+- [ ] Add video explanation.
+- [ ] Modify the costum dataset to label differently left hand and right and.
+- [ ] Retrain the RCNN to allow recognition of left and right hand.
+
 ## Contacs 
 If you ever use this code please cite me  :pray:  :heart:
 
