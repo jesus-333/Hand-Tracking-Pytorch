@@ -9,6 +9,8 @@ Since the big dimension of the RCNN I can't saved the trained model in github bu
 
 To test the track in real time you also need [OpenCV](https://opencv.org/).
 
+A simple video demo is available at https://www.youtube.com/watch?v=1nmR-dRdeos.
+
 ## RCNN Training
 I try two different dataset to train the network. The firs is the pretty famous [EgoHands Dataset](http://vision.soic.indiana.edu/projects/egohands/) (The 1.3 Gb version) and the other is a my personal (costum) dataset that I create. The results are similar and you could choose which one to use. The trained model provided in the link is trained on my personal dataset. 
 
