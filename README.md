@@ -9,6 +9,8 @@ Since the big dimension of the RCNN I can't saved the trained model in github bu
 
 To test the track in real time you also need [OpenCV](https://opencv.org/).
 
+A simple video demo is available at https://www.youtube.com/watch?v=1nmR-dRdeos.
+
 ## RCNN Training
 I try two different dataset to train the network. The firs is the pretty famous [EgoHands Dataset](http://vision.soic.indiana.edu/projects/egohands/) (The 1.3 Gb version) and the other is a my personal (costum) dataset that I create. The results are similar and you could choose which one to use. The trained model provided in the link is trained on my personal dataset. 
 
@@ -40,7 +42,7 @@ The trained network provided with the code doesn't work very well since I train 
 ## Hand tracking script
 The *hand_detector_V2.py* contain the script that track the hand(s). It use OpenCV to capture the camera image and feed that image to the RCNN. With the RCNN I find the hand, take only that portion of the image, reshape in a 140 x 140 square and feed them into the fingers counter.
 
-**NB:** You need a GPU with CUDA to obtain a (more or less) smoot frame rate. I use a GTX 2070 but probably even less powerfull GPU work. To improve the FPS I use a little trick: instead of feed every frame into the RCNN I do it every 3 frame. In this way the code works smoothly granted that you had a GPU capable of executing the code require by the RCNN in relative small time.
+**NB:** You need a GPU with CUDA to obtain a (more or less) smoot frame rate. I use a GTX 2070 but probably even less powerfull GPU work. To improve the FPS I use a little trick: instead of feed every frame into the RCNN I do it every 3 frame. In this way the code works smoothly granted that you had a GPU capable of executing the code required by the RCNN in relative small time.
 
 ## TODO List
 - [ ] Add video explanation.
