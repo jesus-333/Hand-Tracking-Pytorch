@@ -12,12 +12,12 @@ import torch
 
 # Use 0 if you use the laptot camera. 
 #If you use a software to split the video source or similar try 1, 2 etc. (Start with 1)
-default_device = 0 
+default_device = 1 
 
 # If you only want to test this program without the Unity application set to True to obtain a mirrored feedback
 # If you use a third party application to split the video source use that application to obtain the mirror effetct and set this variable to False
 flip_frame = True
-# if(default_device == 1): flip_frame = False
+if(default_device == 1): flip_frame = False
 
 #%% Other variables (don't modify)
 
