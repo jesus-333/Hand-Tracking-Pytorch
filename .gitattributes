@@ -1,5 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-RCNN_(my[[:space:]]dataset)/vision/* linguist-vendored
-RCNN_(egos[[:space:]]hand dataset)/vision/* linguist-vendored
+RCNN_(my_dataset)/vision/* linguist-vendored
+RCNN_(egos_hand_dataset)/vision/* linguist-vendored
